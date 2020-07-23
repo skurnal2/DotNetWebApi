@@ -84,7 +84,12 @@ namespace WebApiExerciseVintriTech.Controllers
                                          Description = x.Description,
                                          UserRatings = (from y in currentRatings
                                                         where x.Id == y.Id
-                                                        select y).ToArray()
+                                                        select new BeerRatingResponse
+                                                        {
+                                                            Username = y.Username,
+                                                            Rating = y.Rating,
+                                                            Comments = y.Comments
+                                                        }).ToArray()
                                      };
 
                 message = Request.CreateResponse(HttpStatusCode.OK, combinedResult);

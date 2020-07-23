@@ -1,1 +1,20 @@
-[{"Id":112,"Username":"supermans","Rating":5.0,"Comments":"That was marvelous!"},{"Id":112,"Username":"skurnal2","Rating":2.5,"Comments":"This was okay for me. Superman liked it but."}]
+[
+  {
+    "id":  1,
+    "username": "john.doe@fictitious.com",
+    "rating": 3,
+    "comments": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+  },
+  {
+    "id": 1,
+    "username": "max.power@fictitious.com",
+    "rating": 5,
+    "comments": "sed do eiusmod tempor incididunt ut labore"
+  },
+  {
+    "id": 2,
+    "username": "max.power@fictitious.com",
+    "rating": 1,
+    "comments": "Real Trash!"
+  }
+]

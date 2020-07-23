@@ -13,6 +13,6 @@ namespace WebApiExerciseVintriTech.Helpers.DTOs
 
         public string Description { get; set; }
 
-        public BeerRating[] UserRatings { get; set; }
+        public BeerRatingResponse[] UserRatings { get; set; }
     }
 }
