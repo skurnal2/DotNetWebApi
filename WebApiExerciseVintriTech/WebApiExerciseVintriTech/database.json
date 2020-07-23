@@ -1,1 +1,22 @@
-[{"Username":"skurnal2","Rating":4.4,"Comment":null}]
+[
+  {
+    "Username": "skurnal2",
+    "Rating": 4.4,
+    "Comments": null
+  },
+  {
+    "Username": "skurnal2",
+    "Rating": 1.0,
+    "Comments": null
+  },
+  {
+    "Username": "adamx3",
+    "Rating": 3.0,
+    "Comments": null
+  },
+  {
+    "Username": "adamx3",
+    "Rating": 5.0,
+    "Comments": "Awesome!."
+  }
+]

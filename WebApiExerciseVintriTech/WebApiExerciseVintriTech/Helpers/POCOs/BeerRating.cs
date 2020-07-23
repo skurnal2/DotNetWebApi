@@ -9,6 +9,6 @@ namespace WebApiExerciseVintriTech.Helpers
     {
         public String Username { get; set; }
         public double Rating { get; set; }
-        public String Comment { get; set; }
+        public String Comments { get; set; }
     }
 }
