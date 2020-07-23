@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Web.Http;
 using WebApiExerciseVintriTech.Helpers;
 using WebApiExerciseVintriTech.Helpers.API;
+using WebApiExerciseVintriTech.Helpers.DTOs;
+using WebApiExerciseVintriTech.Helpers.POCOs;
 
 namespace WebApiExerciseVintriTech.Controllers
 {
@@ -22,14 +24,14 @@ namespace WebApiExerciseVintriTech.Controllers
             PunkApi punkObj = new PunkApi();
             if (!punkObj.CheckIdExists(id))
             {
-                errors.Add("ID does not exist");                
+                errors.Add("ID does not exist");
             }
 
             if (rating.Rating < 1 || rating.Rating > 5)
             {
                 errors.Add("Not a valid rating. Should be between 1 and 5");
             }
-                   
+
             if (errors.Count > 0)
             {
                 Dictionary<string, string[]> messageDictionary = new Dictionary<string, string[]>();
@@ -45,7 +47,7 @@ namespace WebApiExerciseVintriTech.Controllers
                 {
                     rating.Id = id; //Attaching id to rating object
                     WriteToJsonFile(rating);
-                    
+
                     messageDictionary.Add("message", "Rating Successfully Added");
                     message = Request.CreateResponse(HttpStatusCode.OK, messageDictionary);
                 }
@@ -67,25 +69,39 @@ namespace WebApiExerciseVintriTech.Controllers
 
             try
             {
-                var result = punkObj.GetBeersByName(name);
-                //Here load database json file and do Linq to combine results to ratings and reviews
+                //Getting Beer results by name
+                List<BeerInfo> result = punkObj.GetBeersByName(name);
 
+                //Loading database json file
+                List<BeerRating> currentRatings = GetCurrentRatings();
 
-                message = Request.CreateResponse(HttpStatusCode.OK, result);
+                //Doing Linq to combine results to ratings and reviews
+                var combinedResult = from x in result
+                                     select new BeerDTO
+                                     {
+                                         Id = x.Id,
+                                         Name = x.Name,
+                                         Description = x.Description,
+                                         UserRatings = (from y in currentRatings
+                                                        where x.Id == y.Id
+                                                        select y).ToArray()
+                                     };
+
+                message = Request.CreateResponse(HttpStatusCode.OK, combinedResult);
             }
             catch (Exception ex)
             {
                 name = name == null ? "[null]" : name;
                 messageDictionary.Add("error", "Could not process your request for name: " + name + " Error: " + ex.Message);
                 message = Request.CreateResponse(HttpStatusCode.OK, messageDictionary);
-            }            
+            }
 
             return message;
         }
 
         //Helper Methods
         public bool WriteToJsonFile(BeerRating rating)
-        {            
+        {
             //File Path
             var jsonFilePath = System.Web.HttpContext.Current.Server.MapPath(@"~/database.json");
 
@@ -102,13 +118,23 @@ namespace WebApiExerciseVintriTech.Controllers
             //Updating the file
             jsonData = JsonConvert.SerializeObject(currentRatingsStored);
             File.WriteAllText(jsonFilePath, jsonData);
-            
+
             return false;
         }
 
-        //public List<BeerRating> GetCurrentRatings()
-        //{
+        public List<BeerRating> GetCurrentRatings()
+        {
+            // File Path
+            var jsonFilePath = System.Web.HttpContext.Current.Server.MapPath(@"~/database.json");
 
-        //}
+            //Reading the file
+            var jsonData = File.ReadAllText(jsonFilePath);
+
+            //List of Ratings to store current values or an empty list if none exists
+            List<BeerRating> currentRatingsStored = new List<BeerRating>();
+            currentRatingsStored = JsonConvert.DeserializeObject<List<BeerRating>>(jsonData) ?? new List<BeerRating>();
+
+            return currentRatingsStored;
+        }
     }
 }
