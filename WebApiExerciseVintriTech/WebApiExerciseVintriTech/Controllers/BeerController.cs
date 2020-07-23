@@ -62,17 +62,24 @@ namespace WebApiExerciseVintriTech.Controllers
         public HttpResponseMessage Get(string name)
         {
             PunkApi punkObj = new PunkApi();
+            HttpResponseMessage message;
+            Dictionary<string, string> messageDictionary = new Dictionary<string, string>();
 
             try
             {
                 var result = punkObj.GetBeersByName(name);
+                //Here load database json file and do Linq to combine results to ratings and reviews
+
+
+                message = Request.CreateResponse(HttpStatusCode.OK, result);
             }
             catch (Exception ex)
             {
+                name = name == null ? "[null]" : name;
+                messageDictionary.Add("error", "Could not process your request for name: " + name + " Error: " + ex.Message);
+                message = Request.CreateResponse(HttpStatusCode.OK, messageDictionary);
+            }            
 
-            }
-
-            HttpResponseMessage message = Request.CreateResponse(HttpStatusCode.OK, result);
             return message;
         }
 
