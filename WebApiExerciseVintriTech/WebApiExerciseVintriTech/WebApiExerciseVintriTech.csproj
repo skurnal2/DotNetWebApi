@@ -163,6 +163,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\API\PunkApi.cs" />
+    <Compile Include="Helpers\DTOs\BeerDTO.cs" />
+    <Compile Include="Helpers\POCOs\BeerInfo.cs" />
     <Compile Include="Helpers\POCOs\BeerRating.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

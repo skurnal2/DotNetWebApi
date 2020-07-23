@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using WebApiExerciseVintriTech.Helpers.POCOs;
 
 namespace WebApiExerciseVintriTech.Helpers.API
 {
@@ -43,6 +44,27 @@ namespace WebApiExerciseVintriTech.Helpers.API
             }
 
            
+        }
+
+        public List<BeerInfo> GetBeersByName(string name) {
+            string customUrl = root_url + "?beer_name=" + name;
+            WebRequest requestObjGet = WebRequest.Create(customUrl);
+            requestObjGet.Method = "GET";
+            HttpWebResponse responseObjGet = null;
+            responseObjGet = (HttpWebResponse)requestObjGet.GetResponse();
+
+            string api_result = null;
+            using (Stream stream = responseObjGet.GetResponseStream())
+            {
+                StreamReader reader = new StreamReader(stream);
+                api_result = reader.ReadToEnd();
+                reader.Close();
+            }
+
+            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            List<BeerInfo> objectList = (List<BeerInfo>) serializer.Deserialize(api_result, typeof(List<BeerInfo>));
+
+            return objectList;
         }
     }
 }

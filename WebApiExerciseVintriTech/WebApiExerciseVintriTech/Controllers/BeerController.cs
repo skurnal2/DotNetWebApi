@@ -59,6 +59,24 @@ namespace WebApiExerciseVintriTech.Controllers
             return message;
         }
 
+        public HttpResponseMessage Get(string name)
+        {
+            PunkApi punkObj = new PunkApi();
+
+            try
+            {
+                var result = punkObj.GetBeersByName(name);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            HttpResponseMessage message = Request.CreateResponse(HttpStatusCode.OK, result);
+            return message;
+        }
+
+        //Helper Methods
         public bool WriteToJsonFile(BeerRating rating)
         {            
             //File Path
@@ -80,5 +98,10 @@ namespace WebApiExerciseVintriTech.Controllers
             
             return false;
         }
+
+        //public List<BeerRating> GetCurrentRatings()
+        //{
+
+        //}
     }
 }
