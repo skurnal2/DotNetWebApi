@@ -43,6 +43,7 @@ namespace WebApiExerciseVintriTech.Controllers
                 //Appending JSON to file (database.json)  
                 try
                 {
+                    rating.Id = id; //Attaching id to rating object
                     WriteToJsonFile(rating);
                     
                     messageDictionary.Add("message", "Rating Successfully Added");
@@ -59,7 +60,7 @@ namespace WebApiExerciseVintriTech.Controllers
         }
 
         public bool WriteToJsonFile(BeerRating rating)
-        {
+        {            
             //File Path
             var jsonFilePath = System.Web.HttpContext.Current.Server.MapPath(@"~/database.json");
 
