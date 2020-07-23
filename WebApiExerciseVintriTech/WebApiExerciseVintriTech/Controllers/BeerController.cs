@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 using WebApiExerciseVintriTech.Helpers;
 using WebApiExerciseVintriTech.Helpers.API;
 
@@ -38,12 +38,21 @@ namespace WebApiExerciseVintriTech.Controllers
             }
             else
             {
-                //Appending JSON to file (database.json)  
-                WriteToJsonFile(rating);
-
                 Dictionary<string, string> messageDictionary = new Dictionary<string, string>();
-                messageDictionary.Add("message", "Rating Successfully Added");
-                message = Request.CreateResponse(HttpStatusCode.OK , rating);
+
+                //Appending JSON to file (database.json)  
+                try
+                {
+                    WriteToJsonFile(rating);
+                    
+                    messageDictionary.Add("message", "Rating Successfully Added");
+                    message = Request.CreateResponse(HttpStatusCode.OK, messageDictionary);
+                }
+                catch (IOException ex)
+                {
+                    messageDictionary.Add("error", "Could not write to JSON file. \n Error: " + ex.Message);
+                    message = Request.CreateResponse(HttpStatusCode.InternalServerError, messageDictionary);
+                }
             }
 
             return message;
@@ -51,15 +60,22 @@ namespace WebApiExerciseVintriTech.Controllers
 
         public bool WriteToJsonFile(BeerRating rating)
         {
-            //Rating to be added
-            string newRating = new JavaScriptSerializer().Serialize(rating);
-
             //File Path
-            var jsonFilePath = Path.Combine(Environment.CurrentDirectory, "database.json");
+            var jsonFilePath = System.Web.HttpContext.Current.Server.MapPath(@"~/database.json");
 
             //Reading the file
             var jsonData = File.ReadAllText(jsonFilePath);
 
+            //List of Ratings to store current values or an empty list if none exists
+            List<BeerRating> currentRatingsStored = new List<BeerRating>();
+            currentRatingsStored = JsonConvert.DeserializeObject<List<BeerRating>>(jsonData) ?? new List<BeerRating>();
+
+            //Adding newest Rating to the List
+            currentRatingsStored.Add(rating);
+
+            //Updating the file
+            jsonData = JsonConvert.SerializeObject(currentRatingsStored);
+            File.WriteAllText(jsonFilePath, jsonData);
             
             return false;
         }
