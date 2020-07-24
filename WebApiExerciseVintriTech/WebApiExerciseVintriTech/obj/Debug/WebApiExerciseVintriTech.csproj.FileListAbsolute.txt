@@ -80,3 +80,4 @@ C:\Users\siddh\Documents\GitHub\DotNetWebApi\WebApiExerciseVintriTech\WebApiExer
 C:\Users\siddh\Documents\GitHub\DotNetWebApi\WebApiExerciseVintriTech\WebApiExerciseVintriTech\obj\Debug\WebApiExerciseVintriTech.csproj.CopyComplete
 C:\Users\siddh\Documents\GitHub\DotNetWebApi\WebApiExerciseVintriTech\WebApiExerciseVintriTech\obj\Debug\WebApiExerciseVintriTech.dll
 C:\Users\siddh\Documents\GitHub\DotNetWebApi\WebApiExerciseVintriTech\WebApiExerciseVintriTech\obj\Debug\WebApiExerciseVintriTech.pdb
+C:\Users\siddh\Documents\GitHub\DotNetWebApi\WebApiExerciseVintriTech\WebApiExerciseVintriTech\bin\WebApiExerciseVintriTech.xml

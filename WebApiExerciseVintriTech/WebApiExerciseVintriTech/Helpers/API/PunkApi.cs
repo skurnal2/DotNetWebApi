@@ -9,10 +9,18 @@ using WebApiExerciseVintriTech.Helpers.POCOs;
 
 namespace WebApiExerciseVintriTech.Helpers.API
 {
+    /// <summary>
+    /// Class for retrieving info from Punk API
+    /// </summary>
     public class PunkApi
     {
         string root_url = "https://api.punkapi.com/v2/beers";
 
+        /// <summary>
+        /// Checks the identifier exists using Punk API.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Boolean whether or not it exists.</returns>
         public bool CheckIdExists(int id) {
 
             //Concatenating id sent in method with the API url
@@ -46,6 +54,11 @@ namespace WebApiExerciseVintriTech.Helpers.API
            
         }
 
+        /// <summary>
+        /// Gets the beers using name from Punk API.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>List of Beers (using BeerInfo data class)</returns>
         public List<BeerInfo> GetBeersByName(string name) {
             string customUrl = root_url + "?beer_name=" + name;
             WebRequest requestObjGet = WebRequest.Create(customUrl);

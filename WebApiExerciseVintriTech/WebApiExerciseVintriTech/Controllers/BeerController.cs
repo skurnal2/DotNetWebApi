@@ -19,8 +19,12 @@ namespace WebApiExerciseVintriTech.Controllers
     //Action Filter
     public class RegexActionFilter : ActionFilterAttribute
     {
-   
-        //Before Execution  
+
+        //Before Execution          
+        /// <summary>
+        /// Occurs before the action method is invoked.
+        /// </summary>
+        /// <param name="actionContext">The action context.</param>
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
             //Extracts Rating from the parameter
@@ -36,6 +40,11 @@ namespace WebApiExerciseVintriTech.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks the email regex.
+        /// </summary>
+        /// <param name="email">The email.</param>
+        /// <returns></returns>
         public bool CheckEmailRegex(string email)
         {            
             string pattern = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"
@@ -50,10 +59,20 @@ namespace WebApiExerciseVintriTech.Controllers
         }
     }
 
+    /// <summary>
+    /// API Controller Class
+    /// </summary>
+    /// <seealso cref="System.Web.Http.ApiController" />
     public class BeerController : ApiController
-    {         
-        // POST api/beer/id
-        [RegexActionFilter]
+    {
+        // POST api/beer/id        
+        /// <summary>
+        /// Posts id and BeerRating (Comment, Rating, Username) and writes it to database.json file
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="rating">The rating.</param>
+        /// <returns></returns>
+        [RegexActionFilter]        
         public HttpResponseMessage Post(int id, [FromBody] BeerRating rating)
         {
             HttpResponseMessage message = null;
@@ -99,7 +118,12 @@ namespace WebApiExerciseVintriTech.Controllers
             return message;
         }
 
-        // POST api/beer?name=[beer_name]
+        // POST api/beer?name=[beer_name]        
+        /// <summary>
+        /// Gets a name in the parameters and response back a message 
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public HttpResponseMessage Get(string name)
         {
             PunkApi punkObj = new PunkApi();
@@ -143,7 +167,12 @@ namespace WebApiExerciseVintriTech.Controllers
             return message;
         }
 
-        //Helper Methods
+        //Helper Methods        
+        /// <summary>
+        /// Writes to json file.
+        /// </summary>
+        /// <param name="rating">The rating.</param>
+        /// <returns>Boolean (Whether or not succeeded</returns>
         public bool WriteToJsonFile(BeerRating rating)
         {
             //File Path
@@ -166,6 +195,10 @@ namespace WebApiExerciseVintriTech.Controllers
             return false;
         }
 
+        /// <summary>
+        /// Gets the current ratings.
+        /// </summary>
+        /// <returns></returns>
         public List<BeerRating> GetCurrentRatings()
         {
             // File Path

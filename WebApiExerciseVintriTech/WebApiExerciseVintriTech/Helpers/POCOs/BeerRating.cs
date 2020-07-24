@@ -5,6 +5,9 @@ using System.Web;
 
 namespace WebApiExerciseVintriTech.Helpers
 {
+    /// <summary>
+    /// Data class for retrieving the response
+    /// </summary>
     public class BeerRatingResponse
     {        
         public String Username { get; set; }

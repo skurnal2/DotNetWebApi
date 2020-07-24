@@ -5,6 +5,9 @@ using System.Web;
 
 namespace WebApiExerciseVintriTech.Helpers.DTOs
 {
+    /// <summary>
+    /// DTO class for combining using LINQ
+    /// </summary>
     public class BeerDTO
     {
         public int Id { get; set; }
