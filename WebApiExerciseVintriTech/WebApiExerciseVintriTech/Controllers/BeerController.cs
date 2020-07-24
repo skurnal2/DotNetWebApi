@@ -5,7 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
 using WebApiExerciseVintriTech.Helpers;
 using WebApiExerciseVintriTech.Helpers.API;
 using WebApiExerciseVintriTech.Helpers.DTOs;
@@ -13,9 +16,44 @@ using WebApiExerciseVintriTech.Helpers.POCOs;
 
 namespace WebApiExerciseVintriTech.Controllers
 {
-    public class BeerController : ApiController
+    //Action Filter
+    public class RegexActionFilter : ActionFilterAttribute
     {
+   
+        //Before Execution  
+        public override void OnActionExecuting(HttpActionContext actionContext)
+        {
+            //Extracts Rating from the parameter
+            BeerRating rating = (BeerRating)actionContext.ActionArguments["rating"];
+            
+            if (!CheckEmailRegex(rating.Username))
+            {
+                actionContext.Response = actionContext.Request.CreateResponse(
+                    HttpStatusCode.BadRequest,
+                    new { error = "Username should be an Email/Username supplied is not valid." },
+                     actionContext.ControllerContext.Configuration.Formatters.JsonFormatter
+                    );
+            }
+        }
+
+        public bool CheckEmailRegex(string email)
+        {            
+            string pattern = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"
+                                + "@"
+                                + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$";
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(email);
+            if (match.Success)
+                return true;
+            else
+                return false;
+        }
+    }
+
+    public class BeerController : ApiController
+    {         
         // POST api/beer/id
+        [RegexActionFilter]
         public HttpResponseMessage Post(int id, [FromBody] BeerRating rating)
         {
             HttpResponseMessage message = null;
@@ -98,7 +136,7 @@ namespace WebApiExerciseVintriTech.Controllers
             {
                 name = name == null ? "[null]" : name;
                 messageDictionary.Add("error", "Could not process your request for name: " + name + " Error: " + ex.Message);
-                message = Request.CreateResponse(HttpStatusCode.OK, messageDictionary);
+                message = Request.CreateResponse(HttpStatusCode.BadRequest, messageDictionary);
             }
 
             return message;
