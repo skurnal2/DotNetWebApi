@@ -99,6 +99,7 @@ namespace WebApiExerciseVintriTech.Controllers
             return message;
         }
 
+        // POST api/beer?name=[beer_name]
         public HttpResponseMessage Get(string name)
         {
             PunkApi punkObj = new PunkApi();
